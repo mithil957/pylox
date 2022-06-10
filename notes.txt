@@ -1,0 +1,15 @@
+- Lox is a scripting language -> executes directly from source
+
+- How to use interpreter?
+    - python lox.py {path_to_script} -> execute script stored somewhere
+    - python lox.py -> REPL
+
+- Separate code that generates error from code that reports it
+
+- lexeme -> blob of characters where each blob represents something in the language
+
+- lexical grammar -> rules that determine how to group characters into lexemes
+    - if the lexical grammar is "simple" enough then it can be classified as a regular language
+
+- maximal match -> when a grammar rule has overlapping matches, the rule that matches the most characters wins
+    - 'or' vs 'orange' -> one is a operator the other a variable, 'orange' would win
