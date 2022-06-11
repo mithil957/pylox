@@ -1,10 +1,10 @@
 import sys
 
+from lox_exceptions import LoxException
 from scanner import Scanner
 
 
 class Lox:
-    had_error = False
 
     @staticmethod
     def run(source: str):
@@ -16,13 +16,12 @@ class Lox:
     def run_file(path: str) -> None:
         try:
             source_file = open(path, 'r')
-        except BaseException as err:
-            print(f'Unexpected {err=}, {type(err)=}')
-        else:
             source_code = source_file.read()
             Lox.run(source_code)
-            if Lox.had_error:
-                sys.exit(65)
+        except LoxException as err:
+            print(err)
+        except BaseException as err:
+            print(f'Unexpected {err=}, {type(err)=}')
 
     @staticmethod
     def run_prompt() -> None:
@@ -36,24 +35,17 @@ class Lox:
                 print('Empty input, ending session')
                 break
 
-            Lox.run(line)
-            Lox.had_error = False
-
-    @staticmethod
-    def report(line: int, where: str, message: str):
-        print(f'on line {line}, token {where} caused error {message}')
-        Lox.had_error = True
-
-    @staticmethod
-    def error(line: int, message: str):
-        Lox.report(line, "", message)
+            try:
+                Lox.run(line)
+            except LoxException as err:
+                print(err)
 
 
 if __name__ == "__main__":
-    match str(sys.argv):
+    match sys.argv:
+        case['lox.py']:
+            Lox.run_prompt()
         case ['lox.py', filepath]:
             Lox.run_file(filepath)
-        case ['lox.py']:
-            Lox.run_prompt()
         case _:
             print('Usage: python lox.py or python lox.py {script_path}')

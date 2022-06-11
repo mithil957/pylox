@@ -1,4 +1,4 @@
-from lox import Lox
+from lox_exceptions import LoxException
 from token import Token, TokenType
 
 
@@ -87,7 +87,7 @@ class Scanner:
             case str(k) if k.isalpha() or k == '_':
                 self.identifier()
             case _:
-                Lox.error(self.line, "Unexpected character")
+                raise LoxException(self.line, "Unexpected character")
 
     def advance(self) -> str:
         current_char = self.source[self.current]
@@ -124,7 +124,7 @@ class Scanner:
             self.advance()
 
         if self.is_at_end():
-            Lox.error(self.line, "Unterminated string.")
+            raise LoxException(self.line, "Unterminated string")
 
         # The closing "
         self.advance()
@@ -147,7 +147,7 @@ class Scanner:
 
     @staticmethod
     def is_acceptable_char(c: str) -> bool:
-        return c.isalnum() or '_'
+        return c.isalnum() or c == '_'
 
     def identifier(self):
         while Scanner.is_acceptable_char(self.peek()):
